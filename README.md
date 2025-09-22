@@ -2,7 +2,7 @@
 
 ## Project Requirements
 
-1. [Python 3.13](https://www.python.org/downloads/windows/)
+1. [Python 3.12](https://www.python.org/downloads/release/python-31210/)
 2. [VS Code](https://code.visualstudio.com/)
 3. [Python Extensions for VS Code](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
 4. [Git](https://git-scm.com/downloads)
@@ -61,10 +61,10 @@ After making sure that the venv was activated successfully run this command to i
 pip install -r requirements.txt
 ```
 
-### 7. Execute the service
+### 7. Execute the service in dev mode
 
 Once the dependencies are available is time to run the service:
 
 ```pwsh
-python .\src\app.py
+python -m robyn app.py --dev
 ```
