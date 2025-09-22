@@ -66,5 +66,5 @@ pip install -r requirements.txt
 Once the dependencies are available is time to run the service:
 
 ```pwsh
-python -m robyn app.py --dev
+fastapi dev main.py
 ```
