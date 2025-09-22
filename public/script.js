@@ -1,4 +1,4 @@
-const homeState = {
+let homeState = {
   rooms: [
     {
       id: 'living',
@@ -174,7 +174,7 @@ function addMessageToChat(message) {
 function onSubmit(event) {
   event.preventDefault();
 
-  const message = chatInput().value.trim();
+  const message = chatInput.value.trim();
 
   if (!message) {
     return;
@@ -191,8 +191,17 @@ function onWebSocketOpen() {
 
 function onWebSocketMessage(event) {
   const msg = JSON.parse(event.data);
-  if (msg.type === 'message') {
-    addMessageToChat(createBotMsg(msg.data));
+  switch (msg.type) {
+    case 'message':
+      addMessageToChat(createBotMsg(msg.data));
+      break;
+    case 'command':
+      // homeState = msg.data.result;
+      // reflectHomeState();
+      addMessageToChat(createBotMsg(msg.data.message));
+      break;
+    default:
+      break;
   }
 }
 
