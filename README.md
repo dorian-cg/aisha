@@ -1,5 +1,7 @@
 # 🌷 A.I.S.H.A
 
+AI Smart Home Assistant
+
 ## Project Requirements
 
 1. [Python 3.12](https://www.python.org/downloads/release/python-31210/)
