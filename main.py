@@ -1,4 +1,9 @@
 from dotenv import load_dotenv
+
+# run before anything else is imported
+load_dotenv(override=True)  #  load .env file if it exists
+
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
@@ -11,7 +16,6 @@ from api.thermo_routes import thermo_router
 from ws.agent_routes import agent_router
 from data.mock import build_mock_data
 
-load_dotenv(override=True)  # load .env file if it exists
 
 build_mock_data()
 

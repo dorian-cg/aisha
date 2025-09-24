@@ -1,155 +1,111 @@
-let homeState = {
-  rooms: [
-    {
-      id: 'living',
-      name: 'Living Room',
-      devices: [
-        {
-          type: 'light',
-          name: 'light',
-          state: {
-            on: true
-          }
-        },
-        {
-          type: 'thermostat',
-          name: 'thermostat',
-          state: {
-            on: false,
-            temperature: 22
-          }
-        },
-        {
-          type: 'lock',
-          name: 'door lock',
-          state: {
-            locked: true
-          }
-        }
-      ]
-    },
-    {
-      id: 'kitchen',
-      name: 'Kitchen',
-      devices: [
-        {
-          type: 'light',
-          name: 'light',
-          state: {
-            on: false
-          }
-        },
-        {
-          type: 'thermostat',
-          name: 'thermostat',
-          state: {
-            on: false,
-            temperature: 22
-          }
-        },
-      ]
-    },
-    {
-      id: 'garage',
-      name: 'Garage',
-      devices: [
-        {
-          type: 'light',
-          name: 'light',
-          state: {
-            on: false
-          }
-        },
-        {
-          type: 'lock',
-          name: 'door lock',
-          state: {
-            locked: true
-          }
-        }
-      ]
-    },
-    {
-      id: 'bedroom',
-      name: 'Bedroom',
-      devices: [
-        {
-          type: 'light',
-          name: 'light',
-          state: {
-            on: false
-          }
-        },
-        {
-          type: 'thermostat',
-          name: 'thermostat',
-          state: {
-            on: false,
-            temperature: 22
-          }
-        },
-      ]
-    },
-    {
-      id: 'bathroom',
-      name: 'Bathroom',
-      devices: [
-        {
-          type: 'light',
-          name: 'light',
-          state: {
-            on: false
-          }
-        },
-        {
-          type: 'thermostat',
-          name: 'thermostat',
-          state: {
-            on: false,
-            temperature: 22
-          }
-        },
-      ]
-    },
-    {
-      id: 'office',
-      name: 'Office',
-      devices: [
-        {
-          type: 'light',
-          name: 'light',
-          state: {
-            on: false
-          }
-        },
-        {
-          type: 'thermostat',
-          name: 'thermostat',
-          state: {
-            on: false,
-            temperature: 22
-          }
-        },
-      ]
-    },
-  ]
-};
+let messageHistory = [];
+const webSocket = new WebSocket(`/ws/agent`);
 
-const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-const host = window.location.host;
-const webSocket = new WebSocket(`${wsProtocol}//${host}/agent`);
-const home = document.querySelector('.home');
+const homeElement = document.querySelector('.home');
 
-const chat = document.querySelector('.chat');
-const chatMessages = chat.querySelector('.messages');
-const chatForm = chat.querySelector('form');
-const chatInput = chatForm.querySelector('input');
+const livingElement = homeElement.querySelector('.living');
+const kitchenElement = homeElement.querySelector('.kitchen');
+const garageElement = homeElement.querySelector('.garage');
+const bedroomElement = homeElement.querySelector('.bedroom');
+const bathroomElement = homeElement.querySelector('.bathroom');
+const officeElement = homeElement.querySelector('.office');
 
-function sendAction(type, data) {
-  webSocket.send(JSON.stringify({ type, data }));
+const chatElement = document.querySelector('.chat');
+const chatMessagesElement = chatElement.querySelector('.messages');
+const chatFormElement = chatElement.querySelector('form');
+const chatInputElement = chatFormElement.querySelector('input');
+const chatSubmitButtonElement = chatFormElement.querySelector('button');
+let isWaitingForResponse = false;
+
+
+async function getAllRooms() {
+  return await fetch('/api/room/get/all').then(res => res.json());
 }
 
-function createDiv(className, textContent) {
+async function getDevicesForRoom(roomId) {
+  return await fetch(`/api/device/get/room/${roomId}`).then(res => res.json());
+}
+
+async function getLightForDevice(deviceId) {
+  return await fetch(`/api/light/get/device/${deviceId}`).then(res => res.json());
+}
+
+async function getLockForDevice(deviceId) {
+  return await fetch(`/api/lock/get/device/${deviceId}`).then(res => res.json());
+}
+
+async function getThermoForDevice(deviceId) {
+  return await fetch(`/api/thermostat/get/device/${deviceId}`).then(res => res.json());
+}
+
+
+function userMessage(message) {
+  return {
+    sender: 'user',
+    content: message,
+  };
+}
+
+function assistantMessage(message) {
+  return {
+    sender: 'assistant',
+    content: message,
+  };
+}
+
+function onWebSocketOpen() {
+  sendMessageToAgent('Hello!');
+}
+
+async function onWebSocketReceivesMessage(event) {
+  const responses = JSON.parse(event.data);
+
+  for (const response of responses) {
+    addMessageToChatUi(createAssistantMessageUi(response));
+  }
+
+  await updateHomeState();
+
+  isWaitingForResponse = false;
+  updateButtonUi();
+}
+
+function onWebSocketClose() {
+  addMessageToChatUi(createAssistantMessageUi('Session ended. Please refresh the page to start a new session.'));
+}
+
+function sendMessageToAgent(message) {
+  webSocket.send(JSON.stringify([
+    ...messageHistory,
+    userMessage(message),
+  ]));
+}
+
+function onUserSendsMessage(event) {
+  event.preventDefault();
+
+  if (isWaitingForResponse) {
+    alert('Please wait for the current response before sending a new message.');
+    return;
+  }
+
+  isWaitingForResponse = true;
+  updateButtonUi();
+
+  const message = chatInputElement.value.trim();
+
+  if (!message) {
+    isWaitingForResponse = false;
+    updateButtonUi();
+    return;
+  }
+
+  chatFormElement.reset();
+  addMessageToChatUi(createUserMessageUi(message));
+  sendMessageToAgent(message);
+}
+
+function createDivElement(className, textContent) {
   const div = document.createElement('div');
   div.classList.add(className);
   if (textContent) {
@@ -158,129 +114,128 @@ function createDiv(className, textContent) {
   return div;
 }
 
-function createBotMsg(message) {
-  return createDiv('msgbot', message);
+function createAssistantMessageUi(message) {
+  return createDivElement('msgbot', message);
 }
 
-function createUserMsg(message) {
-  return createDiv('msgusr', message);
+function createUserMessageUi(message) {
+  return createDivElement('msgusr', message);
 }
 
-function addMessageToChat(message) {
-  chatMessages.appendChild(message);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+function addMessageToChatUi(message) {
+  chatMessagesElement.appendChild(message);
+  chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
 }
 
-function onSubmit(event) {
-  event.preventDefault();
-
-  const message = chatInput.value.trim();
-
-  if (!message) {
-    return;
+function getUiLightWithState(lightState) {
+  if (lightState.is_on) {
+    return createDivElement('bulb-on');
   }
-
-  chatForm.reset();
-  addMessageToChat(createUserMsg(message));
-  sendAction('message', message);
+  return createDivElement('bulb');
 }
 
-function onWebSocketOpen() {
-  sendAction('init', homeState);
+function getUiOfThermoWithState(thermostatState) {
+  if (!thermostatState.is_on) {
+    return createDivElement('thermostat-off', '- °C');
+  }
+  return createDivElement('temp', `${thermostatState.temperature}°C`);
 }
 
-function onWebSocketMessage(event) {
-  const msg = JSON.parse(event.data);
-  switch (msg.type) {
-    case 'message':
-      addMessageToChat(createBotMsg(msg.data));
-      break;
-    case 'command':
-      // homeState = msg.data.result;
-      // reflectHomeState();
-      addMessageToChat(createBotMsg(msg.data.message));
-      break;
-    default:
-      break;
+function getUiOfLockWithState(lockState) {
+  if (lockState.is_locked) {
+    return createDivElement('lock');
+  }
+  return createDivElement('unlock');
+}
+
+function updateButtonUi() {
+  if (isWaitingForResponse) {
+    chatSubmitButtonElement.disabled = true;
+    chatSubmitButtonElement.textContent = 'Thinking...';
+  } else {
+    chatSubmitButtonElement.disabled = false;
+    chatSubmitButtonElement.textContent = 'Send';
   }
 }
 
-function onWebSocketClose() {
-  addMessageToChat(createBotMsg('Session ended. Please refresh the page to start a new session.'));
-}
+async function updateRoomState(roomId, roomElement) {
+  const devices = await getDevicesForRoom(roomId);
 
-function getLightForState(lightState) {
-  if (lightState.on) {
-    return createDiv('bulb-on');
-  }
-  return createDiv('bulb');
-}
+  const lightDevice = devices.filter(d => d.kind === 'Light').at(0);
+  const getLightPromise = lightDevice ? getLightForDevice(lightDevice.id) : Promise.resolve(null);
 
-function getThermostatForState(thermostatState) {
-  if (!thermostatState.on) {
-    return createDiv('thermostat-off', '- °C');
-  }
-  return createDiv('temp', `${thermostatState.temperature}°C`);
-}
+  const lockDevice = devices.filter(d => d.kind === 'Lock').at(0);
+  const getLockPromise = lockDevice ? getLockForDevice(lockDevice.id) : Promise.resolve(null);
 
-function getLockForState(lockState) {
-  if (lockState.locked) {
-    return createDiv('lock');
-  }
-  return createDiv('unlock');
-}
+  const thermoDevice = devices.filter(d => d.kind === 'Thermo').at(0);
+  const getThermoPromise = thermoDevice ? getThermoForDevice(thermoDevice.id) : Promise.resolve(null);
 
-function applyStateToRoom(room, roomElement) {
+  await Promise.all([getLightPromise, getLockPromise, getThermoPromise]);
+
+  const lightState = await getLightPromise;
+  const lockState = await getLockPromise;
+  const thermoState = await getThermoPromise;
+
   const stateContainer = roomElement.querySelector('.state');
   stateContainer.innerHTML = '';
 
-  for (const device of room.devices) {
-    switch (device.type) {
-      case 'light':
-        stateContainer.appendChild(getLightForState(device.state));
-        break;
-      case 'thermostat':
-        stateContainer.appendChild(getThermostatForState(device.state));
-        break;
-      case 'lock':
-        stateContainer.appendChild(getLockForState(device.state));
-        break;
-      default:
-        break;
-    }
+  if (lightState) {
+    stateContainer.appendChild(getUiLightWithState(lightState));
+  }
+
+  if (thermoState) {
+    stateContainer.appendChild(getUiOfThermoWithState(thermoState));
+  }
+
+  if (lockState) {
+    stateContainer.appendChild(getUiOfLockWithState(lockState));
   }
 }
 
-function reflectHomeState() {
-  for (const room of homeState.rooms) {
-    switch (room.id) {
+async function updateHomeState() {
+  const rooms = await getAllRooms();
+
+  let updateLivingPromise = Promise.resolve();
+  let updateKitchenPromise = Promise.resolve();
+  let updateGaragePromise = Promise.resolve();
+  let updateBedroomPromise = Promise.resolve();
+  let updateBathroomPromise = Promise.resolve();
+  let updateOfficePromise = Promise.resolve();
+
+  for (const room of rooms) {
+    switch (room.name.toLowerCase()) {
       case 'living':
-        applyStateToRoom(room, home.querySelector('.living'));
+        updateLivingPromise = updateRoomState(room.id, livingElement);
         break;
       case 'kitchen':
-        applyStateToRoom(room, home.querySelector('.kitchen'));
+        updateKitchenPromise = updateRoomState(room.id, kitchenElement);
         break;
       case 'garage':
-        applyStateToRoom(room, home.querySelector('.garage'));
+        updateGaragePromise = updateRoomState(room.id, garageElement);
         break;
       case 'bedroom':
-        applyStateToRoom(room, home.querySelector('.bedroom'));
+        updateBedroomPromise = updateRoomState(room.id, bedroomElement);
         break;
       case 'bathroom':
-        applyStateToRoom(room, home.querySelector('.bathroom'));
+        updateBathroomPromise = updateRoomState(room.id, bathroomElement);
         break;
       case 'office':
-        applyStateToRoom(room, home.querySelector('.office'));
-        break;
-      default:
+        updateOfficePromise = updateRoomState(room.id, officeElement);
         break;
     }
   }
+
+  await Promise.all([
+    updateLivingPromise,
+    updateKitchenPromise,
+    updateGaragePromise,
+    updateBedroomPromise,
+    updateBathroomPromise,
+    updateOfficePromise,
+  ]);
 }
 
-reflectHomeState();
-
-chatForm.addEventListener('submit', onSubmit);
 webSocket.addEventListener('open', onWebSocketOpen);
-webSocket.addEventListener('message', onWebSocketMessage);
+webSocket.addEventListener('message', onWebSocketReceivesMessage);
 webSocket.addEventListener('close', onWebSocketClose);
+chatFormElement.addEventListener('submit', onUserSendsMessage);

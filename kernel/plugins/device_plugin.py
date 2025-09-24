@@ -1,6 +1,6 @@
 from typing import List, Annotated
 from semantic_kernel.functions import kernel_function
-from models import Device
+from models.device import Device
 from services import device_service
 
 
