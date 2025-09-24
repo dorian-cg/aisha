@@ -6,7 +6,7 @@ def get_locks() -> list[Lock]:
     return mock_db.locks
 
 
-def get_lock_for_device(device_id: int) -> Lock | None:
+def get_lock_for_device(device_id: str) -> Lock | None:
     locks = get_locks()
 
     for lock in locks:

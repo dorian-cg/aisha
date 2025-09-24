@@ -1,6 +1,6 @@
-from fastapi import FastAPI, APIRouter
+from dotenv import load_dotenv
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
 
 from api.device_routes import device_router
 from api.light_routes import light_router
@@ -10,6 +10,8 @@ from api.thermo_routes import thermo_router
 
 from ws.agent_routes import agent_router
 from data.mock import build_mock_data
+
+load_dotenv(override=True)  # load .env file if it exists
 
 build_mock_data()
 

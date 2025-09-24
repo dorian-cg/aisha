@@ -6,7 +6,7 @@ def get_rooms() -> list[Room]:
     return mock_db.rooms
 
 
-def get_room_by_id(room_id: int) -> Room | None:
+def get_room_by_id(room_id: str) -> Room | None:
     rooms = get_rooms()
 
     for r in rooms:

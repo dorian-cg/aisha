@@ -1,11 +1,8 @@
 from dataclasses import dataclass
-from typing import TypeVar, Generic
-
-T = TypeVar("T")
 
 
 @dataclass
-class Device(Generic[T]):
+class Device:
     id: str = ""
     room_id: str = ""
     name: str = ""

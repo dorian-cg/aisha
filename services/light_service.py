@@ -6,7 +6,7 @@ def get_lights() -> list[Light]:
     return mock_db.lights
 
 
-def get_light_for_device(device_id: int) -> Light | None:
+def get_light_for_device(device_id: str) -> Light | None:
     lights = get_lights()
 
     for light in lights:
