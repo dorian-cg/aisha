@@ -18,7 +18,7 @@ async def ask(messages: List[Message]) -> str:
                 history.add_assistant_message(msg.content)
 
     response: ChatMessageContent = await chat_completion.get_chat_message_content(
-        history=history,
+        history,
         settings=execution_settings,
         kernel=kernel,
     )

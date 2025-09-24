@@ -35,7 +35,7 @@ async function getLockForDevice(deviceId) {
 }
 
 async function getThermoForDevice(deviceId) {
-  return await fetch(`/api/thermostat/get/device/${deviceId}`).then(res => res.json());
+  return await fetch(`/api/thermo/get/device/${deviceId}`).then(res => res.json());
 }
 
 
