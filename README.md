@@ -1,4 +1,4 @@
-# 🤖 A.I.S.H.A
+# 🌷 A.I.S.H.A
 
 ## Project Requirements
 
