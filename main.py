@@ -1,84 +1,27 @@
-from fastapi import FastAPI, WebSocket, logger
+from fastapi import FastAPI, APIRouter
 from fastapi.staticfiles import StaticFiles
-from semantic_kernel import Kernel
-from semantic_kernel.contents.chat_history import ChatHistory
-from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
-from semantic_kernel.connectors.ai.function_choice_behavior import (
-    FunctionChoiceBehavior,
-)
-from semantic_kernel.connectors.ai.open_ai.prompt_execution_settings.azure_chat_prompt_execution_settings import (
-    AzureChatPromptExecutionSettings,
-)
+from fastapi.responses import FileResponse
 
-execution_settings = AzureChatPromptExecutionSettings()
-execution_settings.function_choice_behavior = FunctionChoiceBehavior.Auto()
+from api.device_routes import device_router
+from api.light_routes import light_router
+from api.lock_routes import lock_router
+from api.room_routes import room_router
+from api.thermo_routes import thermo_router
 
-chat_completion = AzureChatCompletion(
-    deployment_name="o4-mini",
-    api_key="",
-    api_version="2025-01-01-preview",
-    endpoint="https://dorianco.openai.azure.com",
-)
+from ws.agent_routes import agent_router
+from data.mock import build_mock_data
 
-kernel = Kernel()
-kernel.add_service(chat_completion)
+build_mock_data()
 
-app = FastAPI()
+app = FastAPI(title="A.I.S.H.A")
 
+# Include routers directly with the app, not with an intermediate router
+app.include_router(device_router, prefix="/api")
+app.include_router(light_router, prefix="/api")
+app.include_router(lock_router, prefix="/api")
+app.include_router(room_router, prefix="/api")
+app.include_router(thermo_router, prefix="/api")
+app.include_router(agent_router, prefix="/ws")
 
-@app.websocket("/agent")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    while True:
-        try:
-            data = await websocket.receive_json()
-            response = await process_message(data)
-            await websocket.send_json(response)
-        except Exception as e:
-            # Try to notify the client about the error; if that fails, break the loop.
-            try:
-                await websocket.send_json({"type": "error", "data": str(e)})
-            except Exception:
-                break
-
-
-# Mount static files after routes so ASGI scopes for websockets are handled by the
-# websocket route instead of StaticFiles (which asserts on non-http scopes).
-app.mount("/", StaticFiles(directory="public", html=True), name="public")
-
-
-async def process_message(message: dict) -> dict:
-    try:
-        match message["type"]:
-            case "init":
-                return {
-                    "type": "message",
-                    "data": "Hello! How can I assist you today?",
-                }
-            case "message":
-                history = ChatHistory()
-                history.add_user_message(message["data"])
-
-                result = await chat_completion.get_chat_message_content(
-                    chat_history=history,
-                    settings=execution_settings,
-                    kernel=kernel,
-                )
-
-                return {
-                    "type": "command",
-                    "data": {
-                        "message": result.content,
-                    },
-                }
-            case _:
-                return {
-                    "type": "message",
-                    "data": "I'm sorry, I don't understand that. Can you please rephrase?",
-                }
-    except Exception as e:
-        logger.error(f"Error processing message: {e}")
-        return {
-            "type": "message",
-            "data": "I'm sorry, I can't process your request right now.",
-        }
+# Mount static files at /static instead of root
+app.mount("/", StaticFiles(directory="public", html=True), name="static")
