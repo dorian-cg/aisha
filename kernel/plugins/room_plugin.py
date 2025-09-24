@@ -20,12 +20,3 @@ class RoomPlugin:
         self, room_id: Annotated[str, "The ID of the room"]
     ) -> Annotated[Room | None, "The room with the specified ID or None"]:
         return room_service.get_room_by_id(room_id)
-
-    @kernel_function(
-        name="get_room_by_name",
-        description="Gets a room by its name",
-    )
-    def get_room_by_name(
-        self, name: Annotated[str, "The name of the room"]
-    ) -> Annotated[Room | None, "The room with the specified name or None"]:
-        return room_service.get_room_by_name(name)
