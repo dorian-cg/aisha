@@ -61,6 +61,7 @@ async function onWebSocketReceivesMessage(event) {
   const responses = JSON.parse(event.data);
 
   for (const response of responses) {
+    messageHistory.push(assistantMessage(response));
     addMessageToChatUi(createAssistantMessageUi(response));
   }
 
@@ -75,10 +76,8 @@ function onWebSocketClose() {
 }
 
 function sendMessageToAgent(message) {
-  webSocket.send(JSON.stringify([
-    ...messageHistory,
-    userMessage(message),
-  ]));
+  messageHistory.push(userMessage(message));
+  webSocket.send(JSON.stringify(messageHistory));
 }
 
 function onUserSendsMessage(event) {
