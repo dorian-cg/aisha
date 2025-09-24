@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from models.device import Device
 from services import device_service
 
-device_router = APIRouter(prefix="/device")
+device_router = APIRouter(prefix="/device", tags=["Device Endpoints"])
 
 
 @device_router.get("/all")

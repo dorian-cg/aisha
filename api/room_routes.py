@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from models.room import Room
 from services import room_service
 
-room_router = APIRouter(prefix="/room")
+room_router = APIRouter(prefix="/room", tags=["Room Endpoints"])
 
 
 @room_router.get("/all")

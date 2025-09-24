@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Response
 from models.light import Light
 from services import light_service
 
-light_router = APIRouter(prefix="/light")
+light_router = APIRouter(prefix="/light", tags=["Light Endpoints"])
 
 
 @light_router.get("/all")

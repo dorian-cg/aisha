@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Response
 from models.lock import Lock
 from services import lock_service
 
-lock_router = APIRouter(prefix="/lock")
+lock_router = APIRouter(prefix="/lock", tags=["Lock Endpoints"])
 
 
 @lock_router.get("/all")
@@ -21,7 +21,7 @@ def get_lock_for_device(device_id: int) -> Lock:
     return lock
 
 
-@lock_router.put("/{device_id}/lock")
+@lock_router.patch("/{device_id}/lock")
 def lock_device(device_id: int):
     if not lock_service.get_lock_for_device(device_id):
         raise HTTPException(status_code=404)
@@ -31,7 +31,7 @@ def lock_device(device_id: int):
     return Response(status_code=200)
 
 
-@lock_router.put("/{device_id}/unlock")
+@lock_router.patch("/{device_id}/unlock")
 def unlock_device(device_id: int):
     if not lock_service.get_lock_for_device(device_id):
         raise HTTPException(status_code=404)
