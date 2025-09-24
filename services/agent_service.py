@@ -8,7 +8,8 @@ from kernel.config import kernel, chat_completion, execution_settings
 async def ask(messages: List[Message]) -> str:
     history = ChatHistory()
 
-    history.add_system_message("You are a smart home assistant.")
+    history.add_system_message("You are a smart home assistant")
+    history.add_system_message("Your name is A.I.S.H.A")
 
     for msg in messages:
         match msg.sender:

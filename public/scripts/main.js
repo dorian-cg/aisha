@@ -54,7 +54,7 @@ function assistantMessage(message) {
 }
 
 function onWebSocketOpen() {
-  sendMessageToAgent('Hello!');
+  sendMessageToAgent('Hi!');
 }
 
 async function onWebSocketReceivesMessage(event) {
