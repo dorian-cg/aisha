@@ -31,13 +31,13 @@ def build_mock_data():
 
 
 def create_mock_bedroom():
-    bedroom = Room(id=generate_unique_id(), name="Bedroom")
+    bedroom = Room(id=generate_unique_id(), name="bedroom")
     mock_db.rooms.append(bedroom)
 
     bedroom_light_device = Device(
         id=generate_unique_id(),
         room_id=bedroom.id,
-        name="Bedroom Light",
+        name="bedroom light",
         kind=Light.__name__,
     )
     mock_db.devices.append(bedroom_light_device)
@@ -58,13 +58,13 @@ def create_mock_bedroom():
 
 
 def create_mock_bathroom():
-    bathroom = Room(id=generate_unique_id(), name="Bathroom")
+    bathroom = Room(id=generate_unique_id(), name="bathroom")
     mock_db.rooms.append(bathroom)
 
     bathroom_light_device = Device(
         id=generate_unique_id(),
         room_id=bathroom.id,
-        name="Bathroom Light",
+        name="bathroom light",
         kind=Light.__name__,
     )
     mock_db.devices.append(bathroom_light_device)
@@ -75,7 +75,7 @@ def create_mock_bathroom():
     bathroom_thermo_device = Device(
         id=generate_unique_id(),
         room_id=bathroom.id,
-        name="Bathroom Thermo",
+        name="bathroom thermo",
         kind=Thermo.__name__,
     )
     mock_db.devices.append(bathroom_thermo_device)
@@ -87,13 +87,13 @@ def create_mock_bathroom():
 
 
 def create_mock_office():
-    office = Room(id=generate_unique_id(), name="Office")
+    office = Room(id=generate_unique_id(), name="office")
     mock_db.rooms.append(office)
 
     office_light_device = Device(
         id=generate_unique_id(),
         room_id=office.id,
-        name="Office Light",
+        name="office light",
         kind=Light.__name__,
     )
     mock_db.devices.append(office_light_device)
@@ -104,7 +104,7 @@ def create_mock_office():
     office_thermo_device = Device(
         id=generate_unique_id(),
         room_id=office.id,
-        name="Office Thermo",
+        name="office thermo",
         kind=Thermo.__name__,
     )
     mock_db.devices.append(office_thermo_device)
@@ -114,13 +114,13 @@ def create_mock_office():
 
 
 def create_mock_living():
-    living = Room(id=generate_unique_id(), name="Living")
+    living = Room(id=generate_unique_id(), name="living")
     mock_db.rooms.append(living)
 
     living_light_device = Device(
         id=generate_unique_id(),
         room_id=living.id,
-        name="Living Light",
+        name="living light",
         kind=Light.__name__,
     )
     mock_db.devices.append(living_light_device)
@@ -142,7 +142,7 @@ def create_mock_living():
     living_lock_device = Device(
         id=generate_unique_id(),
         room_id=living.id,
-        name="Living Lock",
+        name="living lock",
         kind=Lock.__name__,
     )
     mock_db.devices.append(living_lock_device)
@@ -152,13 +152,13 @@ def create_mock_living():
 
 
 def create_mock_kitchen():
-    kitchen = Room(id=generate_unique_id(), name="Kitchen")
+    kitchen = Room(id=generate_unique_id(), name="kitchen")
     mock_db.rooms.append(kitchen)
 
     kitchen_light_device = Device(
         id=generate_unique_id(),
         room_id=kitchen.id,
-        name="Kitchen Light",
+        name="kitchen light",
         kind=Light.__name__,
     )
     mock_db.devices.append(kitchen_light_device)
@@ -169,7 +169,7 @@ def create_mock_kitchen():
     kitchen_thermo_device = Device(
         id=generate_unique_id(),
         room_id=kitchen.id,
-        name="Kitchen Thermo",
+        name="kitchen thermo",
         kind=Thermo.__name__,
     )
     mock_db.devices.append(kitchen_thermo_device)
@@ -179,13 +179,13 @@ def create_mock_kitchen():
 
 
 def create_mock_garage():
-    garage = Room(id=generate_unique_id(), name="Garage")
+    garage = Room(id=generate_unique_id(), name="garage")
     mock_db.rooms.append(garage)
 
     garage_light_device = Device(
         id=generate_unique_id(),
         room_id=garage.id,
-        name="Garage Light",
+        name="garage light",
         kind=Light.__name__,
     )
     mock_db.devices.append(garage_light_device)
@@ -196,7 +196,7 @@ def create_mock_garage():
     garage_lock_device = Device(
         id=generate_unique_id(),
         room_id=garage.id,
-        name="Garage Lock",
+        name="garage lock",
         kind=Lock.__name__,
     )
     mock_db.devices.append(garage_lock_device)
