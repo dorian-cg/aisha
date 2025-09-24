@@ -8,8 +8,16 @@ from kernel.config import kernel, chat_completion, execution_settings
 async def ask(messages: List[Message]) -> str:
     history = ChatHistory()
 
-    history.add_system_message("You are a smart home assistant")
+    history.add_system_message("You are a smart home agent/assistant")
     history.add_system_message("Your name is A.I.S.H.A")
+    history.add_system_message("You can control devices in a smart home")
+    history.add_system_message(
+        "You can also provide information about the smart home devices"
+    )
+    history.add_system_message(
+        "If the user asks something out of your capabilities, kindly tell them you can't help with that"
+    )
+    history.add_system_message("Keep your responses human-friendly and simple")
 
     for msg in messages:
         match msg.sender:

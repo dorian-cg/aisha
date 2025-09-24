@@ -1,5 +1,7 @@
 import os
+import logging
 from semantic_kernel import Kernel
+from semantic_kernel.utils.logging import setup_logging
 from semantic_kernel.connectors.ai.function_choice_behavior import (
     FunctionChoiceBehavior,
 )
@@ -12,6 +14,10 @@ from kernel.plugins.light_plugin import LightPlugin
 from kernel.plugins.lock_plugin import LockPlugin
 from kernel.plugins.room_plugin import RoomPlugin
 from kernel.plugins.thermo_plugin import ThermoPlugin
+
+setup_logging()
+kernel_logger = logging.getLogger("kernel")
+kernel_logger.setLevel(logging.DEBUG)
 
 execution_settings = AzureChatPromptExecutionSettings(
     function_choice_behavior=FunctionChoiceBehavior.Auto()
