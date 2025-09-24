@@ -7,7 +7,7 @@ from services import lock_service
 class LockPlugin:
     @kernel_function(
         name="get_all_locks",
-        description="Gets all locks",
+        description="Gets all locks in the smart home",
     )
     def get_all_locks(self) -> Annotated[List[Lock], "A list of all locks"]:
         return lock_service.get_locks()
@@ -25,12 +25,16 @@ class LockPlugin:
         name="lock",
         description="Locks a lock device",
     )
-    def lock(self, device_id: Annotated[str, "The ID of the device"]) -> None:
+    def lock(
+        self, device_id: Annotated[str, "The ID of the device"]
+    ) -> Annotated[bool, "Whether the lock was locked successfully"]:
         return lock_service.lock(device_id)
 
     @kernel_function(
         name="unlock",
         description="Unlocks a lock device",
     )
-    def unlock(self, device_id: Annotated[str, "The ID of the device"]) -> None:
+    def unlock(
+        self, device_id: Annotated[str, "The ID of the device"]
+    ) -> Annotated[bool, "Whether the lock was unlocked successfully"]:
         return lock_service.unlock(device_id)

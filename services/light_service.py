@@ -16,15 +16,21 @@ def get_light_for_device(device_id: str) -> Light | None:
     return None
 
 
-def turn_light_on(device_id: str):
+def turn_light_on(device_id: str) -> bool:
     lights = get_lights()
     for light in lights:
         if light.device_id == device_id:
             light.is_on = True
+            return True
+
+    return False
 
 
-def turn_light_off(device_id: str):
+def turn_light_off(device_id: str) -> bool:
     lights = get_lights()
     for light in lights:
         if light.device_id == device_id:
             light.is_on = False
+            return True
+
+    return False

@@ -7,7 +7,7 @@ from services import room_service
 class RoomPlugin:
     @kernel_function(
         name="get_all_rooms",
-        description="Gets all rooms",
+        description="Gets all rooms in the smart home",
     )
     def get_all_rooms(self) -> Annotated[List[Room], "A list of all rooms"]:
         return room_service.get_rooms()

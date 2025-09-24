@@ -7,7 +7,7 @@ from services import light_service
 class LightPlugin:
     @kernel_function(
         name="get_all_lights",
-        description="Gets all lights",
+        description="Gets all lights in the smart home",
     )
     def get_all_lights(self) -> Annotated[List[Light], "A list of all lights"]:
         return light_service.get_lights()
@@ -25,12 +25,16 @@ class LightPlugin:
         name="turn_light_on",
         description="Turns a light on for a specific device",
     )
-    def turn_light_on(self, device_id: Annotated[str, "The ID of the device"]) -> None:
+    def turn_light_on(
+        self, device_id: Annotated[str, "The ID of the device"]
+    ) -> Annotated[bool, "Whether the light was turned on successfully"]:
         return light_service.turn_light_on(device_id)
 
     @kernel_function(
         name="turn_light_off",
         description="Turns a light off for a specific device",
     )
-    def turn_light_off(self, device_id: Annotated[str, "The ID of the device"]) -> None:
+    def turn_light_off(
+        self, device_id: Annotated[str, "The ID of the device"]
+    ) -> Annotated[bool, "Whether the light was turned off successfully"]:
         return light_service.turn_light_off(device_id)

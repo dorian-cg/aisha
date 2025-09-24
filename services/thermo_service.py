@@ -21,6 +21,9 @@ def turn_thermo_on(device_id: str):
     for thermo in thermos:
         if thermo.device_id == device_id:
             thermo.is_on = True
+            return True
+
+    return False
 
 
 def turn_thermo_off(device_id: str):
@@ -28,6 +31,9 @@ def turn_thermo_off(device_id: str):
     for thermo in thermos:
         if thermo.device_id == device_id:
             thermo.is_on = False
+            return True
+
+    return False
 
 
 def put_thermo_temperature(device_id: str, temperature: int):
@@ -35,3 +41,6 @@ def put_thermo_temperature(device_id: str, temperature: int):
     for thermo in thermos:
         if thermo.device_id == device_id:
             thermo.temperature = temperature
+            return True
+
+    return False

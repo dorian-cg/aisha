@@ -7,14 +7,14 @@ from services import thermo_service
 class ThermoPlugin:
     @kernel_function(
         name="get_all_thermos",
-        description="Gets all thermos",
+        description="Gets all thermos in the smart home",
     )
     def get_all_thermos(self) -> Annotated[List[Thermo], "A list of all thermos"]:
         return thermo_service.get_thermos()
 
     @kernel_function(
         name="get_thermo_for_device",
-        description="Gets the thermo for a specific device",
+        description="Gets the thermo for a device",
     )
     def get_thermo_for_device(
         self, device_id: Annotated[str, "The ID of the device"]
@@ -25,7 +25,9 @@ class ThermoPlugin:
         name="turn_thermo_on",
         description="Turns a thermo on for a specific device",
     )
-    def turn_thermo_on(self, device_id: Annotated[str, "The ID of the device"]) -> None:
+    def turn_thermo_on(
+        self, device_id: Annotated[str, "The ID of the device"]
+    ) -> Annotated[bool, "Whether the thermo was turned on successfully"]:
         return thermo_service.turn_thermo_on(device_id)
 
     @kernel_function(
@@ -34,7 +36,7 @@ class ThermoPlugin:
     )
     def turn_thermo_off(
         self, device_id: Annotated[str, "The ID of the device"]
-    ) -> None:
+    ) -> Annotated[bool, "Whether the thermo was turned off successfully"]:
         return thermo_service.turn_thermo_off(device_id)
 
     @kernel_function(
@@ -45,5 +47,5 @@ class ThermoPlugin:
         self,
         device_id: Annotated[str, "The ID of the device"],
         temperature: Annotated[int, "Desired temperature as integer"],
-    ) -> None:
+    ) -> Annotated[bool, "Whether the temperature was set successfully"]:
         return thermo_service.put_thermo_temperature(device_id, temperature)
