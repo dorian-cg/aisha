@@ -193,17 +193,6 @@ def create_mock_garage():
     garage_light = Light(id=generate_unique_id(), device_id=garage_light_device.id)
     mock_db.lights.append(garage_light)
 
-    garage_thermo_device = Device(
-        id=generate_unique_id(),
-        room_id=garage.id,
-        name="Garage Thermo",
-        kind=Thermo.__name__,
-    )
-    mock_db.devices.append(garage_thermo_device)
-
-    garage_thermo = Thermo(id=generate_unique_id(), device_id=garage_thermo_device.id)
-    mock_db.thermos.append(garage_thermo)
-
     garage_lock_device = Device(
         id=generate_unique_id(),
         room_id=garage.id,
