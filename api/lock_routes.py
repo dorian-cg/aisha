@@ -12,7 +12,7 @@ def get_locks() -> List[Lock]:
 
 
 @lock_router.get("/{device_id}")
-def get_lock_for_device(device_id: int) -> Lock:
+def get_lock_for_device(device_id: str) -> Lock:
     lock = lock_service.get_lock_for_device(device_id)
 
     if not lock:
@@ -22,7 +22,7 @@ def get_lock_for_device(device_id: int) -> Lock:
 
 
 @lock_router.patch("/{device_id}/lock")
-def lock_device(device_id: int):
+def lock_device(device_id: str):
     if not lock_service.get_lock_for_device(device_id):
         raise HTTPException(status_code=404)
 
@@ -32,7 +32,7 @@ def lock_device(device_id: int):
 
 
 @lock_router.patch("/{device_id}/unlock")
-def unlock_device(device_id: int):
+def unlock_device(device_id: str):
     if not lock_service.get_lock_for_device(device_id):
         raise HTTPException(status_code=404)
 

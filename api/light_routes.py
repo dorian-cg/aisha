@@ -12,7 +12,7 @@ def get_lights() -> List[Light]:
 
 
 @light_router.get("/{device_id}")
-def get_light_for_device(device_id: int) -> Light:
+def get_light_for_device(device_id: str) -> Light:
     light = light_service.get_light_for_device(device_id)
 
     if not light:
@@ -22,7 +22,7 @@ def get_light_for_device(device_id: int) -> Light:
 
 
 @light_router.patch("/{device_id}/turn_on")
-def turn_light_on(device_id: int):
+def turn_light_on(device_id: str):
     if not light_service.get_light_for_device(device_id):
         raise HTTPException(status_code=404)
 
@@ -32,7 +32,7 @@ def turn_light_on(device_id: int):
 
 
 @light_router.patch("/{device_id}/turn_off")
-def turn_light_off(device_id: int):
+def turn_light_off(device_id: str):
     if not light_service.get_light_for_device(device_id):
         raise HTTPException(status_code=404)
 
