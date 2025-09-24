@@ -1,16 +1,41 @@
 from typing import List
-from fastapi import APIRouter
-from services import lock_service
+from fastapi import APIRouter, HTTPException, Response
 from models.lock import Lock
+from services import lock_service
 
 lock_router = APIRouter(prefix="/lock")
 
 
-@lock_router.get("/get/all")
+@lock_router.get("/all")
 def get_locks() -> List[Lock]:
     return lock_service.get_locks()
 
 
-@lock_router.get("/get/device/{device_id}")
+@lock_router.get("/{device_id}")
 def get_lock_for_device(device_id: int) -> Lock:
-    return lock_service.get_lock_for_device(device_id)
+    lock = lock_service.get_lock_for_device(device_id)
+
+    if not lock:
+        raise HTTPException(status_code=404)
+
+    return lock
+
+
+@lock_router.put("/{device_id}/lock")
+def lock_device(device_id: int):
+    if not lock_service.get_lock_for_device(device_id):
+        raise HTTPException(status_code=404)
+
+    lock_service.lock_device(device_id)
+
+    return Response(status_code=200)
+
+
+@lock_router.put("/{device_id}/unlock")
+def unlock_device(device_id: int):
+    if not lock_service.get_lock_for_device(device_id):
+        raise HTTPException(status_code=404)
+
+    lock_service.unlock_device(device_id)
+
+    return Response(status_code=200)

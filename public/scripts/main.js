@@ -19,23 +19,23 @@ let isWaitingForResponse = false;
 
 
 async function getAllRooms() {
-  return await fetch('/api/room/get/all').then(res => res.json());
+  return await fetch('/api/room/all').then(res => res.json());
 }
 
 async function getDevicesForRoom(roomId) {
-  return await fetch(`/api/device/get/room/${roomId}`).then(res => res.json());
+  return await fetch(`/api/device/room/${roomId}`).then(res => res.json());
 }
 
 async function getLightForDevice(deviceId) {
-  return await fetch(`/api/light/get/device/${deviceId}`).then(res => res.json());
+  return await fetch(`/api/light/${deviceId}`).then(res => res.json());
 }
 
 async function getLockForDevice(deviceId) {
-  return await fetch(`/api/lock/get/device/${deviceId}`).then(res => res.json());
+  return await fetch(`/api/lock/${deviceId}`).then(res => res.json());
 }
 
 async function getThermoForDevice(deviceId) {
-  return await fetch(`/api/thermo/get/device/${deviceId}`).then(res => res.json());
+  return await fetch(`/api/thermo/${deviceId}`).then(res => res.json());
 }
 
 
