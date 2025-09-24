@@ -20,3 +20,17 @@ class LockPlugin:
         self, device_id: Annotated[str, "The ID of the device"]
     ) -> Annotated[Lock | None, "The lock for the specified device or None"]:
         return lock_service.get_lock_for_device(device_id)
+
+    @kernel_function(
+        name="lock",
+        description="Locks a lock device",
+    )
+    def lock(self, device_id: Annotated[str, "The ID of the device"]) -> None:
+        return lock_service.lock(device_id)
+
+    @kernel_function(
+        name="unlock",
+        description="Unlocks a lock device",
+    )
+    def unlock(self, device_id: Annotated[str, "The ID of the device"]) -> None:
+        return lock_service.unlock(device_id)
