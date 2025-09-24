@@ -61,6 +61,7 @@ async function onWebSocketReceivesMessage(event) {
   const responses = JSON.parse(event.data);
 
   for (const response of responses) {
+    speak(response);
     messageHistory.push(assistantMessage(response));
     addMessageToChatUi(createAssistantMessageUi(response));
   }
@@ -73,6 +74,15 @@ async function onWebSocketReceivesMessage(event) {
 
 function onWebSocketClose() {
   addMessageToChatUi(createAssistantMessageUi('Session ended. Please refresh the page to start a new session.'));
+}
+
+function speak(text) {
+  const voice = window.speechSynthesis.getVoices().find(v => v.name === 'Google US English');
+  voice.default = true;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.voice = voice;
+
+  window.speechSynthesis.speak(utter);
 }
 
 function sendMessageToAgent(message) {
