@@ -248,3 +248,4 @@ webSocket.addEventListener('open', onWebSocketOpen);
 webSocket.addEventListener('message', onWebSocketReceivesMessage);
 webSocket.addEventListener('close', onWebSocketClose);
 chatFormElement.addEventListener('submit', onUserSendsMessage);
+updateHomeState();
