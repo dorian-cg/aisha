@@ -13,7 +13,7 @@ AI Smart Home Assistant
 
 ### 1. Go to a location in your computer where you want to save (or already saved) the project
 
-```pwsh
+```bash
 cd C:/Users/MyUser/Desktop
 ```
 
@@ -21,13 +21,13 @@ cd C:/Users/MyUser/Desktop
 
 This step is not necessary if you have already cloned the repo.
 
-```pwsh
+```bash
 git clone https://github.com/dorian-cg/aisha
 ```
 
 ### 3. Go into the project folder
 
-```pwsh
+```bash
 cd aisha
 ```
 
@@ -35,13 +35,13 @@ cd aisha
 
 This step is not necessary if you have already created the venv.
 
-```pwsh
+```bash
 python -m venv ./venv
 ```
 
 ### 5. Activate Python venv for the project
 
-```pwsh
+```bash
 ./venv/Scripts/Activate.ps1
 ```
 
@@ -49,7 +49,7 @@ After successfully activating the venv you will noticed there is a green prefix 
 
 It looks something like this:
 
-```pwsh
+```ps
 (venv) PS C:\Users\MyUser\Desktop\aisha>
 ```
 
@@ -59,7 +59,7 @@ After making sure that the venv was activated successfully run this command to i
 
 > This step is not needed if you already installed the dependencies before.
 
-```pwsh
+```bash
 pip install -r requirements.txt
 ```
 
@@ -77,6 +77,6 @@ AZ_OPENAI_CHAT_COMPLETION_API_KEY=put-your-api-key-here
 
 Once the dependencies are available is time to run the service:
 
-```pwsh
+```bash
 fastapi dev main.py
 ```
