@@ -78,7 +78,9 @@ function onWebSocketClose() {
 
 function speak(text) {
   const voice = window.speechSynthesis.getVoices().find(v => v.name === 'Google US English');
-  voice.default = true;
+  if(voice){
+    voice.default = true;
+  }
   const utter = new SpeechSynthesisUtterance(text);
   utter.voice = voice;
 
