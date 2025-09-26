@@ -80,11 +80,10 @@ function speak(text) {
   const voice = window.speechSynthesis.getVoices().find(v => v.name === 'Google US English');
   if(voice){
     voice.default = true;
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.voice = voice;
+    window.speechSynthesis.speak(utter);
   }
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.voice = voice;
-
-  window.speechSynthesis.speak(utter);
 }
 
 function sendMessageToAgent(message) {
