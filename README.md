@@ -63,7 +63,17 @@ After making sure that the venv was activated successfully run this command to i
 pip install -r requirements.txt
 ```
 
-### 7. Execute the service in dev mode
+### 7. Define `.env` file
+There is a `.env.template` at the root of the folder which has placeholder values, create a `.env` file with the same values and replace the placeholders with the actual values needed to connect to your Azure OpenAI model. 
+> This step is not needed if you already created the `.env` file before.
+```.env
+AZ_OPENAI_ENDPOINT=put-your-endpoint-here
+AZ_OPENAI_API_VERSION=2024-12-01-preview
+AZ_OPENAI_DEPLOYMENT_NAME=gpt-5-nano
+AZ_OPENAI_CHAT_COMPLETION_API_KEY=put-your-api-key-here
+```
+
+### 8. Execute the service in dev mode
 
 Once the dependencies are available is time to run the service:
 
